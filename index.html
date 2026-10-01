@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Mein Trinktracker</title>
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background: #dff4ff;
+      color: #12344d;
+    }
+
+    .app {
+      width: 90%;
+      max-width: 420px;
+      padding: 30px;
+      text-align: center;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    .tropfen {
+      font-size: 70px;
+    }
+
+    .anzeige {
+      margin: 25px 0;
+      padding: 20px;
+      background: #edf9ff;
+      border-radius: 15px;
+    }
+
+    #glaeser {
+      margin: 0;
+      font-size: 48px;
+      font-weight: bold;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 12px;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .hinzufuegen {
+      background: #168bd2;
+      color: white;
+    }
+
+    .zuruecksetzen {
+      background: #e5e5e5;
+      color: #333333;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="app">
+    <div class="tropfen">💧</div>
+
+    <h1>Mein Trinktracker</h1>
+
+    <p>Ein Glas entspricht 250 Millilitern.</p>
+
+    <section class="anzeige">
+      <p id="glaeser">0</p>
+      <p>Gläser heute</p>
+      <p id="menge">0 Milliliter</p>
+    </section>
+
+    <button class="hinzufuegen" onclick="glasHinzufuegen()">
+      Ein Glas hinzufügen
+    </button>
+
+    <button class="zuruecksetzen" onclick="tagZuruecksetzen()">
+      Tag zurücksetzen
+    </button>
+  </main>
+
+  <script>
+    // Bereits gespeicherten Tagesstand laden
+    let anzahlGlaeser = Number(localStorage.getItem("anzahlGlaeser")) || 0;
+
+    // Anzeige auf dem Bildschirm aktualisieren
+    function anzeigeAktualisieren() {
+      document.getElementById("glaeser").textContent = anzahlGlaeser;
+      document.getElementById("menge").textContent =
+        anzahlGlaeser * 250 + " Milliliter";
+
+      localStorage.setItem("anzahlGlaeser", anzahlGlaeser);
+    }
+
+    // Ein Glas hinzufügen
+    function glasHinzufuegen() {
+      anzahlGlaeser++;
+      anzeigeAktualisieren();
+    }
+
+    // Tagesstand auf null setzen
+    function tagZuruecksetzen() {
+      anzahlGlaeser = 0;
+      anzeigeAktualisieren();
+    }
+
+    anzeigeAktualisieren();
+  </script>
+
+</body>
+</html>
