@@ -7,66 +7,165 @@
   <title>Mein Trinktracker</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      padding: 20px;
       font-family: Arial, sans-serif;
-      background: #dff4ff;
       color: #12344d;
+      background: linear-gradient(135deg, #b8e7ff, #e9f9ff, #90d7f7);
+      background-size: 300% 300%;
+      animation: hintergrund 10s ease infinite;
+    }
+
+    @keyframes hintergrund {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
     }
 
     .app {
-      width: 90%;
-      max-width: 420px;
-      padding: 30px;
+      width: 100%;
+      max-width: 430px;
+      padding: 32px;
       text-align: center;
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    }
-
-    h1 {
-      margin-top: 0;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 28px;
+      box-shadow: 0 18px 45px rgba(24, 113, 160, 0.25);
     }
 
     .tropfen {
-      font-size: 70px;
+      display: inline-block;
+      font-size: 72px;
+      animation: schweben 2.5s ease-in-out infinite;
+    }
+
+    @keyframes schweben {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    h1 {
+      margin: 10px 0 6px;
+      font-size: 32px;
+    }
+
+    .untertitel {
+      margin: 0 0 24px;
+      color: #52758c;
     }
 
     .anzeige {
-      margin: 25px 0;
-      padding: 20px;
-      background: #edf9ff;
-      border-radius: 15px;
+      margin: 20px 0;
+      padding: 24px;
+      background: linear-gradient(145deg, #edfaff, #dff4ff);
+      border-radius: 20px;
     }
 
     #glaeser {
       margin: 0;
-      font-size: 48px;
+      font-size: 56px;
       font-weight: bold;
+      color: #087fc0;
+    }
+
+    .bezeichnung {
+      margin: 4px 0;
+      font-size: 18px;
+    }
+
+    #menge {
+      margin: 8px 0 0;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .zielzeile {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 24px;
+      font-size: 14px;
+      color: #52758c;
+    }
+
+    .fortschritt-aussen {
+      height: 18px;
+      margin-top: 8px;
+      overflow: hidden;
+      background: #cfe7f2;
+      border-radius: 20px;
+    }
+
+    #fortschritt {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #13a8e3, #087fc0);
+      border-radius: 20px;
+      transition: width 0.5s ease;
+    }
+
+    #nachricht {
+      min-height: 48px;
+      margin: 20px 0;
+      padding: 12px;
+      font-weight: bold;
+      color: #075d8d;
+      background: #eefaff;
+      border-radius: 12px;
     }
 
     button {
       width: 100%;
       margin-top: 12px;
-      padding: 16px;
+      padding: 17px;
       border: none;
-      border-radius: 12px;
+      border-radius: 14px;
       font-size: 18px;
+      font-weight: bold;
       cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    button:active {
+      transform: scale(0.97);
     }
 
     .hinzufuegen {
-      background: #168bd2;
       color: white;
+      background: linear-gradient(135deg, #10a6e0, #087fc0);
+      box-shadow: 0 7px 18px rgba(8, 127, 192, 0.3);
     }
 
     .zuruecksetzen {
-      background: #e5e5e5;
-      color: #333333;
+      color: #31536a;
+      background: #e5f1f6;
+    }
+
+    .hinweis {
+      margin: 20px 0 0;
+      font-size: 13px;
+      color: #6c8798;
     }
   </style>
 </head>
@@ -78,34 +177,99 @@
 
     <h1>Mein Trinktracker</h1>
 
-    <p>Ein Glas entspricht 250 Millilitern.</p>
+    <p class="untertitel">
+      Ein Glas entspricht 500 Millilitern.
+    </p>
 
     <section class="anzeige">
       <p id="glaeser">0</p>
-      <p>Gläser heute</p>
+      <p class="bezeichnung">Gläser heute</p>
       <p id="menge">0 Milliliter</p>
+
+      <div class="zielzeile">
+        <span>Tagesfortschritt</span>
+        <span id="prozent">0 %</span>
+      </div>
+
+      <div
+        class="fortschritt-aussen"
+        role="progressbar"
+        aria-label="Tagesfortschritt"
+        aria-valuemin="0"
+        aria-valuemax="100"
+      >
+        <div id="fortschritt"></div>
+      </div>
     </section>
 
+    <p id="nachricht">
+      Starte mit deinem ersten Glas Wasser.
+    </p>
+
     <button class="hinzufuegen" onclick="glasHinzufuegen()">
-      Ein Glas hinzufügen
+      💧 500 ml hinzufügen
     </button>
 
     <button class="zuruecksetzen" onclick="tagZuruecksetzen()">
-      Tag zurücksetzen
+      Tagesstand zurücksetzen
     </button>
+
+    <p class="hinweis">
+      Tagesziel: 2.000 Milliliter
+    </p>
   </main>
 
   <script>
-    // Bereits gespeicherten Tagesstand laden
-    let anzahlGlaeser = Number(localStorage.getItem("anzahlGlaeser")) || 0;
+    // Feste Werte für diese Version
+    const glasgroesse = 500;
+    const tagesziel = 2000;
 
-    // Anzeige auf dem Bildschirm aktualisieren
+    // Gespeicherten Tagesstand laden
+    let anzahlGlaeser =
+      Number(localStorage.getItem("anzahlGlaeser")) || 0;
+
+    // Anzeige und Fortschrittsbalken aktualisieren
     function anzeigeAktualisieren() {
-      document.getElementById("glaeser").textContent = anzahlGlaeser;
+      const menge = anzahlGlaeser * glasgroesse;
+      const prozent = Math.min(
+        Math.round((menge / tagesziel) * 100),
+        100
+      );
+
+      document.getElementById("glaeser").textContent =
+        anzahlGlaeser;
+
       document.getElementById("menge").textContent =
-        anzahlGlaeser * 250 + " Milliliter";
+        menge + " Milliliter";
+
+      document.getElementById("prozent").textContent =
+        prozent + " %";
+
+      document.getElementById("fortschritt").style.width =
+        prozent + "%";
 
       localStorage.setItem("anzahlGlaeser", anzahlGlaeser);
+
+      nachrichtAktualisieren(menge);
+    }
+
+    // Passende Motivation anzeigen
+    function nachrichtAktualisieren(menge) {
+      const nachricht = document.getElementById("nachricht");
+
+      if (menge === 0) {
+        nachricht.textContent =
+          "Starte mit deinem ersten Glas Wasser.";
+      } else if (menge < 1000) {
+        nachricht.textContent =
+          "Guter Anfang – bleib dran!";
+      } else if (menge < 2000) {
+        nachricht.textContent =
+          "Halbzeit geschafft!";
+      } else {
+        nachricht.textContent =
+          "🎉 Tagesziel erreicht – sehr gut!";
+      }
     }
 
     // Ein Glas hinzufügen
